@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tweak Studio — Sound Design &amp; Music Production</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500;600;700&family=Archivo:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#F6F4EF;
+    --paper-dim:#EFEBE1;
+    --ink:#15161A;
+    --ink-soft:#2B2C30;
+    --signal:#E13B22;
+    --accent-music:#1E6E62;
+    --success:#1E8E3E;
+    --line:#D9D3C4;
+    --mute:#6B675C;
+    --radius:2px;
+    --wrap: min(1080px, 92vw);
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Archivo', sans-serif;
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .mono{
+    font-family:'Geist Mono', monospace;
+    letter-spacing:0.02em;
+  }
+
+  .eyebrow{
+    font-family:'Geist Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+
+  .wrap{
+    width:var(--wrap);
+    margin:0 auto;
+  }
+
+  ::selection{ background:var(--signal); color:var(--paper); }
+
+  :focus-visible{
+    outline:2px solid var(--signal);
+    outline-offset:3px;
+  }
+
+  /* ---------- MASTHEAD ---------- */
+
+  header.masthead{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(246,244,239,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+
+  .masthead-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 0;
+  }
+
+  .logo{
+    font-family:'Geist', sans-serif;
+    font-weight:600;
+    font-size:17px;
+    letter-spacing:0.02em;
+  }
+
+  nav.primary{
+    display:flex;
+    gap:28px;
+  }
+  nav.primary a{
+    font-family:'Geist Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    padding:4px 2px;
+    border-bottom:1px solid transparent;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  nav.primary a:hover{
+    color:var(--signal);
+    border-color:var(--signal);
+  }
+
+  /* ---------- HERO ---------- */
+
+  .hero{
+    padding:96px 0 88px;
+  }
+
+  .hero h1{
+    font-family:'Geist', sans-serif;
+    font-weight:600;
+    font-size:clamp(38px, 6vw, 74px);
+    line-height:1.04;
+    letter-spacing:-0.01em;
+    max-width:15ch;
+  }
+
+  .hero h1 em{
+    font-style:normal;
+    color:var(--signal);
+  }
+
+  .hero-sub{
+    margin-top:28px;
+    max-width:46ch;
+    font-size:18px;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+
+  section{
+    padding:88px 0;
+  }
+  section + section{
+    border-top:1px solid var(--line);
+  }
+
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:56px;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+
+  .section-head h2{
+    font-family:'Geist', sans-serif;
+    font-weight:500;
+    font-size:clamp(26px, 3vw, 34px);
+  }
+
+  /* ---------- WORK ---------- */
+
+  .filter-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:8px;
+  }
+
+  .filter-chip{
+    font-family:'Geist Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:6px 14px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:transparent;
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:border-color .2s ease, color .2s ease, background .2s ease;
+  }
+  .filter-chip:hover{
+    border-color:var(--ink);
+    color:var(--ink);
+  }
+  .filter-chip.active{
+    background:var(--ink);
+    border-color:var(--ink);
+    color:var(--paper);
+  }
+
+  .project[hidden]{ display:none; }
+
+  .more-work{
+    margin-top:8px;
+    padding-top:32px;
+  }
+
+  .section-divider{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    margin-bottom:8px;
+  }
+  .section-divider::before,
+  .section-divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+
+  .more-list{
+    margin-top:20px;
+  }
+  .more-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+    gap:16px;
+    cursor:none;
+  }
+  .more-row-left{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .more-row .more-name{
+    font-family:'Geist', sans-serif;
+    font-size:16px;
+    transition:color .2s ease;
+  }
+  .more-row:hover .more-name{
+    color:var(--signal);
+  }
+  .more-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .more-row .more-meta{
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--mute);
+    white-space:nowrap;
+  }
+
+  /* focused video lightbox — enlarges playback without going full-screen */
+  .video-lightbox{
+    position:fixed;
+    inset:0;
+    background:rgba(21,22,26,0.9);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:6vh 6vw;
+    z-index:200;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+  }
+  .video-lightbox.active{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .video-lightbox-inner{
+    position:relative;
+    width:min(1040px, 100%);
+  }
+  .video-lightbox-inner video{
+    display:block;
+    width:100%;
+    max-height:80vh;
+    background:#000;
+    border:1px solid var(--line);
+  }
+  .lightbox-close{
+    position:absolute;
+    top:-46px;
+    right:0;
+    width:36px; height:36px;
+    padding:0;
+    border-radius:50%;
+    background:none;
+    border:1px solid var(--paper);
+    color:var(--paper);
+    font-family:'Geist Mono', monospace;
+    font-size:16px;
+    line-height:1;
+    cursor:pointer;
+    transition:background .2s ease, color .2s ease;
+  }
+  .lightbox-close:hover{
+    background:var(--paper);
+    color:var(--ink);
+  }
+
+  /* cursor-following video-preview thumbnail */
+  .cursor-preview{
+    position:fixed;
+    top:0; left:0;
+    width:180px;
+    aspect-ratio:16/10;
+    background:var(--paper-dim);
+    border:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
+    opacity:0;
+    overflow:hidden;
+    transform:translate(-50%, -50%) scale(0.9);
+    transition:opacity .15s ease, transform .15s ease;
+    z-index:60;
+  }
+  .cursor-preview.active{
+    opacity:1;
+    transform:translate(-50%, -50%) scale(1);
+  }
+  .cursor-preview video{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+  .cursor-preview .play-btn{
+    width:40px; height:40px;
+    position:relative;
+  }
+  .cursor-preview .play-btn svg{
+    width:11px; height:11px;
+  }
+
+  .project{
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:28px;
+    padding:44px 0;
+  }
+  .project + .project{
+    border-top:1px solid var(--line);
+  }
+
+  .project-tc{
+    font-family:'Geist Mono', monospace;
+    font-size:13px;
+    color:var(--signal);
+    padding-top:4px;
+  }
+
+  .project-body{
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:40px;
+    align-items:start;
+  }
+
+  @media (max-width: 800px){
+    .project-body{ grid-template-columns:1fr; }
+  }
+
+  .project-title{
+    font-family:'Geist', sans-serif;
+    font-weight:600;
+    font-size:28px;
+    margin-bottom:10px;
+  }
+
+  .tag-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:14px;
+  }
+
+  .tag{
+    font-family:'Geist Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:4px 10px;
+    border:1px solid currentColor;
+    border-radius:999px;
+  }
+  .tag-sound{ color:var(--signal); }
+  .tag-music{ color:var(--accent-music); }
+
+  .project-meta{
+    font-family:'Geist Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--mute);
+    margin-bottom:18px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 0;
+  }
+  .project-meta span:not(:last-child)::after{
+    content:"·";
+    margin:0 8px;
+    color:var(--line);
+  }
+
+  .project-desc{
+    color:var(--ink-soft);
+    max-width:48ch;
+    margin-bottom:20px;
+  }
+
+  .project-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'Geist Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink);
+    border-bottom:1px solid var(--ink);
+    padding-bottom:2px;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .project-link:hover{
+    color:var(--signal);
+    border-color:var(--signal);
+  }
+
+  /* video frame — used for both embed-link and self-hosted placeholders */
+  .frame{
+    position:relative;
+    aspect-ratio:16/10;
+    background:var(--paper-dim);
+    border:1px solid var(--line);
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .frame video, .frame iframe{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    border:0;
+    object-fit:cover;
+  }
+
+  .video-thumb{
+    cursor:pointer;
+  }
+
+  .play-btn{
+    width:52px; height:52px;
+    padding:0;
+    border-radius:50%;
+    background:var(--paper);
+    border:1px solid var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:background .2s ease;
+    position:relative;
+    z-index:2;
+  }
+  .frame:hover .play-btn{
+    background:var(--signal);
+    border-color:var(--signal);
+  }
+  .frame:hover .play-btn svg{ fill:var(--paper); }
+  .play-btn svg{
+    width:14px; height:14px;
+    fill:var(--ink);
+    margin-left:2px;
+    transition:fill .2s ease;
+  }
+
+  /* ---------- HOW WE WORK ---------- */
+
+  .how-subsection + .how-subsection{
+    margin-top:72px;
+  }
+
+  .how-subhead{
+    font-family:'Geist', sans-serif;
+    font-weight:600;
+    font-size:22px;
+    margin-bottom:14px;
+  }
+
+  .how-intro{
+    color:var(--ink-soft);
+    max-width:56ch;
+    margin-bottom:32px;
+  }
+
+  .style-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:24px;
+  }
+  @media (max-width:900px){
+    .style-grid{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:520px){
+    .style-grid{ grid-template-columns:1fr; }
+  }
+
+  .style-label{
+    margin-top:12px;
+    font-family:'Geist Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+  .style-label-selected{
+    color:var(--success);
+  }
+
+  .scene-compare{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+  }
+  .scene-compare-3{
+    grid-template-columns:repeat(3, 1fr);
+  }
+  @media (max-width:800px){
+    .scene-compare{ grid-template-columns:1fr; }
+  }
+
+  /* ---------- ABOUT ---------- */
+
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:64px;
+  }
+  @media (max-width:800px){
+    .about-grid{ grid-template-columns:1fr; gap:40px; }
+  }
+
+  .pull{
+    font-family:'Geist', sans-serif;
+    font-style:normal;
+    font-weight:600;
+    font-size:clamp(24px,3.4vw,34px);
+    line-height:1.3;
+    color:var(--ink);
+    max-width:20ch;
+  }
+
+  .about-body{
+    margin-top:26px;
+    color:var(--ink-soft);
+    max-width:52ch;
+  }
+
+  /* ---------- TEAM ---------- */
+
+  .team-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+  }
+  @media (max-width:800px){
+    .team-grid{ grid-template-columns:1fr; }
+  }
+
+  .team-card{
+    border:1px solid var(--line);
+    padding:28px;
+  }
+
+  .team-name{
+    font-family:'Geist', sans-serif;
+    font-weight:600;
+    font-size:22px;
+    margin-bottom:6px;
+  }
+
+  .team-role{
+    font-family:'Geist Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+
+  .team-bio{
+    margin-top:16px;
+    font-family:'Geist Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.02em;
+    color:var(--mute);
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 0;
+  }
+  .team-bio span:not(:last-child)::after{
+    content:"·";
+    margin:0 8px;
+    color:var(--line);
+  }
+
+  /* ---------- CLIENTS (logo strip) ---------- */
+
+  .logo-strip{
+    overflow:hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 9.6%, #000 90.4%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 9.6%, #000 90.4%, transparent);
+  }
+
+  .logo-track{
+    display:flex;
+    align-items:center;
+    width:max-content;
+    gap:72px;
+    animation: logo-scroll 28s linear infinite;
+  }
+  .logo-track:hover{
+    animation-play-state:paused;
+  }
+
+  @keyframes logo-scroll{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+
+  .logo-item img{
+    display:block;
+    height:32px;
+    width:auto;
+  }
+  .logo-item img.logo-invert{
+    filter:invert(1);
+  }
+  .logo-item img.logo-blend{
+    mix-blend-mode:multiply;
+  }
+
+  .yc-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-left:16px;
+    vertical-align:middle;
+  }
+  .yc-badge img{
+    height:14px;
+    width:14px;
+    border-radius:3px;
+  }
+
+  .logo-item{
+    display:inline-flex;
+    align-items:center;
+    background:var(--paper);
+    font-family:'Geist', sans-serif;
+    font-weight:600;
+    font-size:20px;
+    letter-spacing:0.01em;
+    color:var(--mute);
+    filter:grayscale(1);
+    opacity:0.55;
+    white-space:nowrap;
+    transition:color .25s ease, opacity .25s ease, filter .25s ease;
+  }
+  .logo-item:hover{
+    color:var(--signal);
+    filter:grayscale(0);
+    opacity:1;
+  }
+
+  .services{
+    border-top:1px solid var(--line);
+  }
+  .service-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:16px 0;
+    border-bottom:1px solid var(--line);
+    gap:16px;
+  }
+  .service-row .name{
+    font-family:'Geist', sans-serif;
+    font-size:17px;
+  }
+  .service-row .num{
+    font-family:'Geist Mono', monospace;
+    font-size:11px;
+    color:var(--mute);
+  }
+
+  /* ---------- CONTACT ---------- */
+
+  .contact-line{
+    font-family:'Geist', sans-serif;
+    font-weight:500;
+    font-size:clamp(28px, 4vw, 46px);
+    margin-bottom:34px;
+    max-width:16ch;
+  }
+
+  .contact-email{
+    font-family:'Geist Mono', monospace;
+    font-size:clamp(18px, 2.4vw, 24px);
+    display:inline-block;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:4px;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .contact-email:hover{
+    color:var(--signal);
+    border-color:var(--signal);
+  }
+
+  .contact-meta{
+    margin-top:48px;
+    display:flex;
+    gap:40px;
+    flex-wrap:wrap;
+  }
+  .contact-meta .group .eyebrow{ margin-bottom:8px; }
+  .contact-meta .group a, .contact-meta .group div{
+    display:block;
+    font-size:14px;
+    color:var(--ink-soft);
+    padding:2px 0;
+  }
+  .contact-meta .group a:hover{ color:var(--signal); }
+
+  footer{
+    padding:28px 0 40px;
+  }
+  footer .foot-inner{
+    display:flex;
+    justify-content:space-between;
+    font-family:'Geist Mono', monospace;
+    font-size:11px;
+    color:var(--mute);
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
+  @media (max-width:640px){
+    nav.primary{ gap:16px; }
+    .project{ grid-template-columns:40px 1fr; gap:16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap masthead-inner">
+    <a href="#top" class="logo">TWEAK STUDIO</a>
+    <nav class="primary">
+      <a href="#work">Work</a>
+      <a href="#how-we-work">Process</a>
+      <a href="#about">About</a>
+      <a href="#team">Team</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow" style="margin-bottom:22px;">Sound Design &amp; Music Production</p>
+      <h1>We build the sound the picture <em>can't live</em> without.</h1>
+      <p class="hero-sub">We're a design practice with sound as our medium — composing, designing, and mixing for film, advertising, and the moving image, from first spot to final mix.</p>
+    </div>
+
+    <div class="wrap">
+      <p class="eyebrow" style="margin:56px 0 20px;">Trusted by</p>
+      <div class="logo-strip">
+      <div class="logo-track">
+        <span class="logo-item"><img src="images/cnvrt-labs.png" alt="Cnvrt Labs"></span>
+        <span class="logo-item"><img src="images/mochatrade.png" class="logo-invert" alt="Mochatrade"><span class="yc-badge"><img src="images/yc-logo.png" alt="Y Combinator"><span class="mono" style="font-size:10px; color:var(--mute);">P26</span></span></span>
+        <span class="logo-item"><img src="images/lanesurf.png" alt="Lanesurf"><span class="yc-badge"><img src="images/yc-logo.png" alt="Y Combinator"><span class="mono" style="font-size:10px; color:var(--mute);">S25</span></span></span>
+        <span class="logo-item"><img src="images/ion-design.png" alt="Ion Design"><span class="yc-badge"><img src="images/yc-logo.png" alt="Y Combinator"><span class="mono" style="font-size:10px; color:var(--mute);">W24</span></span></span>
+        <span class="logo-item"><img src="images/devconnect-argentina.png" alt="DevConnect Argentina"></span>
+        <span class="logo-item"><img src="images/sanctum.png" alt="Sanctum.so"></span>
+        <span class="logo-item"><img src="images/varick.png" class="logo-blend" alt="Varick"></span>
+        <span class="logo-item"><img src="images/little-unusual.png" alt="Little Unusual"></span>
+        <span class="logo-item"><img src="images/draconic.png" alt="Draconic"></span>
+        <span class="logo-item"><img src="images/abacor.png" alt="Abacor"></span>
+        <!-- duplicate set — keeps the marquee looping seamlessly -->
+        <span class="logo-item" aria-hidden="true"><img src="images/cnvrt-labs.png" alt="Cnvrt Labs"></span>
+        <span class="logo-item" aria-hidden="true"><img src="images/mochatrade.png" class="logo-invert" alt="Mochatrade"><span class="yc-badge"><img src="images/yc-logo.png" alt="Y Combinator"><span class="mono" style="font-size:10px; color:var(--mute);">P26</span></span></span>
+        <span class="logo-item" aria-hidden="true"><img src="images/lanesurf.png" alt="Lanesurf"><span class="yc-badge"><img src="images/yc-logo.png" alt="Y Combinator"><span class="mono" style="font-size:10px; color:var(--mute);">S25</span></span></span>
+        <span class="logo-item" aria-hidden="true"><img src="images/ion-design.png" alt="Ion Design"><span class="yc-badge"><img src="images/yc-logo.png" alt="Y Combinator"><span class="mono" style="font-size:10px; color:var(--mute);">W24</span></span></span>
+        <span class="logo-item" aria-hidden="true"><img src="images/devconnect-argentina.png" alt="DevConnect Argentina"></span>
+        <span class="logo-item" aria-hidden="true"><img src="images/sanctum.png" alt="Sanctum.so"></span>
+        <span class="logo-item" aria-hidden="true"><img src="images/varick.png" class="logo-blend" alt="Varick"></span>
+        <span class="logo-item" aria-hidden="true"><img src="images/little-unusual.png" alt="Little Unusual"></span>
+        <span class="logo-item" aria-hidden="true"><img src="images/draconic.png" alt="Draconic"></span>
+        <span class="logo-item" aria-hidden="true"><img src="images/abacor.png" alt="Abacor"></span>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Selected work</h2>
+        <span class="eyebrow">2021 — 2026</span>
+      </div>
+
+      <div class="filter-row">
+        <button class="filter-chip active" data-filter="all">All</button>
+        <button class="filter-chip" data-filter="music">Music Production</button>
+        <button class="filter-chip" data-filter="sound">Sound Design</button>
+      </div>
+
+      <!-- PROJECT 1 — embedded link (e.g. Vimeo/YouTube) -->
+      <article class="project" data-tags="sound,music">
+        <div class="project-tc mono">00:01</div>
+        <div class="project-body">
+          <div>
+            <h3 class="project-title">Mochatrade — Product Launch</h3>
+            <div class="tag-row">
+              <span class="tag tag-sound">Sound Design</span>
+              <span class="tag tag-music">Music Production</span>
+            </div>
+            <div class="project-meta">
+              <span>Product Launch</span><span>Mochatrade</span><span>2026</span>
+            </div>
+            <p class="project-desc">[Placeholder — describe the sound design and mix work for Mochatrade's launch film.]</p>
+          </div>
+          <div class="frame video-thumb" data-video-src="videos/mocha2.mp4">
+            <video preload="auto" muted playsinline autoplay loop><source src="videos/mocha2.mp4" type="video/mp4"></video>
+            <button class="play-btn" aria-label="Play video"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROJECT 2 — self-hosted video -->
+      <article class="project" data-tags="music">
+        <div class="project-tc mono">00:02</div>
+        <div class="project-body">
+          <div>
+            <h3 class="project-title">Ion Design — Brand Launch</h3>
+            <div class="tag-row">
+              <span class="tag tag-music">Music Production</span>
+            </div>
+            <div class="project-meta">
+              <span>Brand Launch</span><span>Ion Design</span><span>2026</span>
+            </div>
+            <p class="project-desc">[Placeholder — describe the score and sound work for Ion Design's brand launch film.]</p>
+          </div>
+          <div class="frame video-thumb" data-video-src="videos/ion.mp4">
+            <video preload="auto" muted playsinline autoplay loop><source src="videos/ion.mp4" type="video/mp4"></video>
+            <button class="play-btn" aria-label="Play video"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROJECT 3 — embedded link -->
+      <article class="project" data-tags="sound,music">
+        <div class="project-tc mono">00:03</div>
+        <div class="project-body">
+          <div>
+            <h3 class="project-title">Lanesurf — Product Launch</h3>
+            <div class="tag-row">
+              <span class="tag tag-sound">Sound Design</span>
+              <span class="tag tag-music">Music Production</span>
+            </div>
+            <div class="project-meta">
+              <span>Product Launch</span><span>Lanesurf</span><span>2026</span>
+            </div>
+            <p class="project-desc">[Placeholder — describe the sound design and mix work for Lanesurf's launch film.]</p>
+          </div>
+          <div class="frame video-thumb" data-video-src="videos/lanesurf.mp4">
+            <video preload="auto" muted playsinline autoplay loop><source src="videos/lanesurf.mp4" type="video/mp4"></video>
+            <button class="play-btn" aria-label="Play video"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROJECT 4 — self-hosted video -->
+      <article class="project" data-tags="sound">
+        <div class="project-tc mono">00:04</div>
+        <div class="project-body">
+          <div>
+            <h3 class="project-title">DevConnect Argentina</h3>
+            <div class="tag-row">
+              <span class="tag tag-sound">Sound Design</span>
+            </div>
+            <div class="project-meta">
+              <span>Event Film</span><span>DevConnect Argentina</span><span>2024</span>
+            </div>
+            <p class="project-desc">[Placeholder — describe the sound design work for DevConnect Argentina.]</p>
+          </div>
+          <div class="frame video-thumb" data-video-src="videos/devctx-c02.mp4">
+            <video preload="auto" muted playsinline autoplay loop><source src="videos/devctx-c02.mp4" type="video/mp4"></video>
+            <button class="play-btn" aria-label="Play video"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROJECT 5 — self-hosted video -->
+      <article class="project" data-tags="sound,music">
+        <div class="project-tc mono">00:05</div>
+        <div class="project-body">
+          <div>
+            <h3 class="project-title">Abacor — Launch</h3>
+            <div class="tag-row">
+              <span class="tag tag-sound">Sound Design</span>
+              <span class="tag tag-music">Music Production</span>
+            </div>
+            <div class="project-meta">
+              <span>Product Launch</span><span>Abacor</span><span>2025</span>
+            </div>
+            <p class="project-desc">[Placeholder — describe the sound design and music production work for the Abacor launch film.]</p>
+          </div>
+          <div class="frame video-thumb" data-video-src="videos/abacor.mp4">
+            <video preload="auto" muted playsinline autoplay loop><source src="videos/abacor.mp4" type="video/mp4"></video>
+            <button class="play-btn" aria-label="Play video"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></button>
+          </div>
+        </div>
+      </article>
+
+      <div class="more-work">
+        <div class="section-divider"><span class="eyebrow">More work</span></div>
+        <div class="more-list" id="moreList">
+          <a class="more-row" href="videos/devctx2.mp4" target="_blank" rel="noopener" data-video-src="videos/devctx2.mp4">
+            <span class="more-row-left"><span class="more-name">DevConnect Argentina — Vol. 2</span><span class="more-tags"><span class="tag tag-sound">Sound Design</span></span></span>
+            <span class="more-meta mono">[Watch]</span>
+          </a>
+          <a class="more-row" href="videos/draconic-1080p.mp4" target="_blank" rel="noopener" data-video-src="videos/draconic-1080p.mp4">
+            <span class="more-row-left"><span class="more-name">Draconic.ai</span><span class="more-tags"><span class="tag tag-sound">Sound Design</span><span class="tag tag-music">Music Production</span></span></span>
+            <span class="more-meta mono">[Watch]</span>
+          </a>
+          <a class="more-row" href="videos/sanctum.mp4" target="_blank" rel="noopener" data-video-src="videos/sanctum.mp4">
+            <span class="more-row-left"><span class="more-name">Sanctum.so</span><span class="more-tags"><span class="tag tag-sound">Sound Design</span></span></span>
+            <span class="more-meta mono">[Watch]</span>
+          </a>
+          <a class="more-row" href="videos/mocha1.mp4" target="_blank" rel="noopener" data-video-src="videos/mocha1.mp4">
+            <span class="more-row-left"><span class="more-name">Mochatrade — Brand Launch</span><span class="more-tags"><span class="tag tag-sound">Sound Design</span><span class="tag tag-music">Music Production</span></span></span>
+            <span class="more-meta mono">[Watch]</span>
+          </a>
+          <a class="more-row" href="videos/lanesurf1.mp4" target="_blank" rel="noopener" data-video-src="videos/lanesurf1.mp4">
+            <span class="more-row-left"><span class="more-name">Lanesurf — Brand Launch</span><span class="more-tags"><span class="tag tag-sound">Sound Design</span><span class="tag tag-music">Music Production</span></span></span>
+            <span class="more-meta mono">[Watch]</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="how-we-work">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>How we work</h2>
+        <span class="eyebrow">Process</span>
+      </div>
+
+      <div class="how-subsection">
+        <h3 class="how-subhead">Music Production</h3>
+        <p class="how-intro">Same brief, scored four different ways for Varick — three directions we moved past before landing on the one that shipped. Every draft came from the brand's motifs, not a genre reference.</p>
+        <div class="style-grid">
+          <div>
+            <div class="frame video-thumb" data-video-src="videos/varick-draft.mp4">
+              <video preload="auto" muted playsinline autoplay loop><source src="videos/varick-draft.mp4" type="video/mp4"></video>
+              <button class="play-btn" aria-label="Play video"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></button>
+            </div>
+            <p class="style-label">Rejected — Draft 1</p>
+          </div>
+          <div>
+            <div class="frame video-thumb" data-video-src="videos/varick-draft2.mp4">
+              <video preload="auto" muted playsinline autoplay loop><source src="videos/varick-draft2.mp4" type="video/mp4"></video>
+              <button class="play-btn" aria-label="Play video"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></button>
+            </div>
+            <p class="style-label">Rejected — Draft 2</p>
+          </div>
+          <div>
+            <div class="frame video-thumb" data-video-src="videos/varick-comp3.mp4">
+              <video preload="auto" muted playsinline autoplay loop><source src="videos/varick-comp3.mp4" type="video/mp4"></video>
+              <button class="play-btn" aria-label="Play video"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></button>
+            </div>
+            <p class="style-label">Rejected — Draft 3</p>
+          </div>
+          <div>
+            <div class="frame video-thumb" data-video-src="videos/varick-final.mp4">
+              <video preload="auto" muted playsinline autoplay loop><source src="videos/varick-final.mp4" type="video/mp4"></video>
+              <button class="play-btn" aria-label="Play video"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></button>
+            </div>
+            <p class="style-label style-label-selected">Selected — Final</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-subsection">
+        <h3 class="how-subhead">Sound Design</h3>
+        <p class="how-intro">The SFX palette gets built around the brand, not just the picture — dark and cinematic for Draconic, playful for Solana, classy for Mocha.</p>
+        <div class="scene-compare scene-compare-3">
+          <div>
+            <div class="frame video-thumb" data-video-src="videos/sfx-draconic.mp4">
+              <video preload="auto" muted playsinline autoplay loop><source src="videos/sfx-draconic.mp4" type="video/mp4"></video>
+              <button class="play-btn" aria-label="Play video"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></button>
+            </div>
+            <p class="style-label">Draconic — Dark &amp; Cinematic</p>
+          </div>
+          <div>
+            <div class="frame video-thumb" data-video-src="videos/sfx-solana.mp4">
+              <video preload="auto" muted playsinline autoplay loop><source src="videos/sfx-solana.mp4" type="video/mp4"></video>
+              <button class="play-btn" aria-label="Play video"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></button>
+            </div>
+            <p class="style-label">Solana — Playful</p>
+          </div>
+          <div>
+            <div class="frame video-thumb" data-video-src="videos/sfx-mocha-showcase.mp4">
+              <video preload="auto" muted playsinline autoplay loop><source src="videos/sfx-mocha-showcase.mp4" type="video/mp4"></video>
+              <button class="play-btn" aria-label="Play video"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></button>
+            </div>
+            <p class="style-label">Mocha — Classy</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>About</h2>
+        <span class="eyebrow">The studio</span>
+      </div>
+
+      <div class="about-grid">
+        <div>
+          <p class="pull">Genres come after music — they're labels applied to what already exists. We start with the brand, not a reference track.</p>
+          <p class="about-body">We build a brand's sonic language from the ground up: melody, rhythm, and harmony define its motifs; instrumentation, synthesis, and sound design give them texture; production, mixing, and mastering shape how they live across every touchpoint. The same way a visual identity makes a brand recognisable before you read its name, we believe its sound should make it recognisable before you see the screen. We design identity. Our medium is sound.</p>
+        </div>
+
+        <div class="services">
+          <div class="service-row"><span class="name">Sound Design</span><span class="num mono">01</span></div>
+          <div class="service-row"><span class="name">Original Score &amp; Composition</span><span class="num mono">02</span></div>
+          <div class="service-row"><span class="name">Music Production &amp; Mixing</span><span class="num mono">03</span></div>
+          <div class="service-row"><span class="name">Foley &amp; Field Recording</span><span class="num mono">04</span></div>
+          <div class="service-row"><span class="name">Sonic Branding</span><span class="num mono">05</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="team">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Team</h2>
+        <span class="eyebrow">Who's behind it</span>
+      </div>
+
+      <div class="team-grid">
+        <div class="team-card">
+          <p class="team-name">Darsan Sunoj</p>
+          <p class="team-role">Partner</p>
+          <div class="team-bio">
+            <span>10 years in music production, synthesis and sound design</span>
+            <span>Trained in audio engineering and music production from SACAC</span>
+            <span>Institute Music Secretary, IIT Guwahati (2023–2024)</span>
+          </div>
+        </div>
+        <div class="team-card">
+          <p class="team-name">Sourajit Choudhury</p>
+          <p class="team-role">Partner</p>
+          <div class="team-bio">
+            <span>8 years in music production</span>
+            <span>200K+ Spotify streams</span>
+            <span>Trinity College London Grade 8 Classical Piano</span>
+            <span>Institute Music Secretary, IIT Guwahati (2025–2026)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="contact">
+    <div class="wrap">
+      <p class="eyebrow" style="margin-bottom:20px;">Contact</p>
+      <p class="contact-line">Got a project that needs a sound?</p>
+      <a class="contact-email" href="mailto:darsansunoj@gmail.com">darsansunoj@gmail.com</a>
+
+      <div class="contact-meta">
+        <div class="group">
+          <p class="eyebrow">Based in</p>
+          <div>Delhi NCR 🇮🇳</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="video-lightbox" id="videoLightbox">
+    <div class="video-lightbox-inner">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+      <video id="lightboxVideo" controls playsinline></video>
+    </div>
+  </div>
+
+  <div class="cursor-preview" id="cursorPreview">
+    <video id="cursorPreviewVideo" muted loop playsinline preload="none"></video>
+    <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>© 2026 Tweak Studio. All sound reserved.</span>
+    <span>We design identity. Our medium is sound.</span>
+  </div>
+</footer>
+
+<script>
+  // Focused video lightbox — clicking any video thumbnail opens an enlarged,
+  // centered player (not true full-screen) over a dimmed backdrop.
+  const videoLightbox = document.getElementById('videoLightbox');
+  const lightboxVideo = document.getElementById('lightboxVideo');
+  const lightboxClose = document.getElementById('lightboxClose');
+
+  function openLightbox(src) {
+    lightboxVideo.src = src;
+    videoLightbox.classList.add('active');
+    lightboxVideo.play().catch(() => {});
+  }
+  function closeLightbox() {
+    videoLightbox.classList.remove('active');
+    lightboxVideo.pause();
+    lightboxVideo.removeAttribute('src');
+    lightboxVideo.load();
+  }
+  document.querySelectorAll('.video-thumb').forEach(thumb => {
+    thumb.addEventListener('click', () => openLightbox(thumb.dataset.videoSrc));
+  });
+  document.querySelectorAll('.more-row').forEach(row => {
+    row.addEventListener('click', e => {
+      e.preventDefault();
+      openLightbox(row.dataset.videoSrc);
+    });
+  });
+  lightboxClose.addEventListener('click', closeLightbox);
+  videoLightbox.addEventListener('click', e => {
+    if (e.target === videoLightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // Cursor-following video-preview thumbnail over the "More work" rows
+  const cursorPreview = document.getElementById('cursorPreview');
+  const cursorPreviewVideo = document.getElementById('cursorPreviewVideo');
+  document.addEventListener('mousemove', e => {
+    cursorPreview.style.left = e.clientX + 'px';
+    cursorPreview.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('.more-row').forEach(row => {
+    row.addEventListener('mouseenter', () => {
+      cursorPreview.classList.add('active');
+      const src = row.dataset.videoSrc;
+      if (src && cursorPreviewVideo.currentSrc !== new URL(src, window.location.href).href) {
+        cursorPreviewVideo.src = src;
+      }
+      cursorPreviewVideo.play().catch(() => {});
+    });
+    row.addEventListener('mouseleave', () => {
+      cursorPreview.classList.remove('active');
+      cursorPreviewVideo.pause();
+    });
+  });
+
+  // Work filter chips: each .project has data-tags, e.g. "sound,music" or "sound"
+  const filterChips = document.querySelectorAll('.filter-chip');
+  const projects = document.querySelectorAll('#work .project');
+
+  filterChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      filterChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const filter = chip.dataset.filter;
+
+      projects.forEach(project => {
+        const tags = project.dataset.tags.split(',');
+        project.hidden = filter !== 'all' && !tags.includes(filter);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
